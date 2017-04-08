@@ -1,9 +1,8 @@
 package Service;
 
 import bl.Util;
-import dao.employeeDAO;
+
 import dao.EmployeeDAO;
-import entity.employee;
 import entity.Employee;
 
 import java.sql.Connection;
@@ -83,7 +82,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
             ResultSet resultSet = preparedStatement.executeQuery(sql);
 
             while (resultSet.next()) {
-                Employee employee = new employee();
+                Employee employee = new Employee();
                 employee.setId(resultSet.getLong("ID"));
                 employee.setFirstName(resultSet.getString("FIRST_NAME"));
                 employee.setLastName(resultSet.getString("LAST_NAME"));
@@ -111,9 +110,9 @@ public class EmployeeService extends Util implements EmployeeDAO {
 
         PreparedStatement preparedStatement = null;
 
-        String sql = "SELECT ID, COUNTRY, CITY, STREET, POST_CODE FROM  employee WHERE ID = ?";
+        String sql = "SELECT ID, ADDRESS_ID, FIRST_NAME, LAST_NAME, BIRTHDAY FROM public.employee WHERE ID = ?";
 
-        Employee employee = new employee();
+        Employee employee = new Employee();
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -122,10 +121,10 @@ public class EmployeeService extends Util implements EmployeeDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             employee.setId(resultSet.getLong("ID"));
-            employee.setCountry(resultSet.getString("COUNTRY"));
-            employee.setCity(resultSet.getString("CITY"));
-            employee.setStreet(resultSet.getString("STREET"));
-            employee.setPostcode(resultSet.getString("POST_CODE"));
+            employee.setAddressId(resultSet.getLong("ADDRESS_ID"));
+            employee.setFirstName(resultSet.getString("FIRST_NAME"));
+            employee.setLastName(resultSet.getString("LAST_NAME"));
+            employee.setBirthday(resultSet.getDate("BIRTHDAY"));
 
             preparedStatement.executeUpdate();
 
@@ -144,28 +143,19 @@ public class EmployeeService extends Util implements EmployeeDAO {
     }
 
     @Override
-    public void update(Employee employee) {
-
-    }
-
-    @Override
-    public void remove(Employee employee) {
-
-    }
-
-    @Override
     public void update(Employee employee) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "UPDATE employee SET COUNTRY=?, CITY=?, STREET=?, POST_CODE=? WHERE ID = ?";
+        // UPDATE employee SET ADDRESS_ID=1, FIRST_NAME='asdf', LAST_NAME='qwerty', BIRTHDAY='2012-12-12' WHERE ID = 1;
+        String sql = "UPDATE employee SET ADDRESS_ID=?, FIRST_NAME=?, LAST_NAME=?, BIRTHDAY=? WHERE ID = ?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
 
-            preparedStatement.setString(1,employee.getCountry());
-            preparedStatement.setString(2,employee.getCity());
-            preparedStatement.setString(3,employee.getStreet());
-            preparedStatement.setString(4,employee.getPostcode());
+            preparedStatement.setLong(1,employee.getAddressId());
+            preparedStatement.setString(2,employee.getFirstName());
+            preparedStatement.setString(3,employee.getLastName());
+            preparedStatement.setDate(4,employee.getBirthday());
             preparedStatement.setLong(5,employee.getId());
 
             preparedStatement.executeUpdate();
@@ -187,17 +177,14 @@ public class EmployeeService extends Util implements EmployeeDAO {
 
         PreparedStatement preparedStatement = null;
 
-        String sql = "DELETE FROM employee WHERE ID=?";
+        String sql = "DELETE FROM EMPLOYEE WHERE ID=?";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
-
             preparedStatement.setLong(1,employee.getId());
-
             preparedStatement.executeUpdate();
-
-        } catch (SQLException sqlError) {
-            sqlError.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (preparedStatement != null) {
                 preparedStatement.close();
