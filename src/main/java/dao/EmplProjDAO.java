@@ -17,7 +17,7 @@ public interface EmplProjDAO {
     //read
     List<EmplProj> getAll();
 
-    Project getById(long employeeId, long projectId);
+    Project getByEmployeeIdAndProjectId(long employeeId, long projectId);
 
     //update
     void update(EmplProj emplProj);
