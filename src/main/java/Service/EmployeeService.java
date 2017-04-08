@@ -38,7 +38,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
     public void add(Employee employee) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO EMPLOYEE (ID, FIRST_NAME, LAST_NAME, BIRTHDAY, employee_ID) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO EMPLOYEE (ID, FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES(?, ?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -47,7 +47,6 @@ public class EmployeeService extends Util implements EmployeeDAO {
             preparedStatement.setString(2,employee.getFirstName());
             preparedStatement.setString(3,employee.getLastName());
             preparedStatement.setDate(4,employee.getBirthday());
-            preparedStatement.setLong(5,employee.getAddressId());
 
             preparedStatement.executeUpdate();
 
@@ -64,14 +63,19 @@ public class EmployeeService extends Util implements EmployeeDAO {
 
     }
 
-    @Override
-    public List<employee> getAll() throws SQLException {
+    /**
+     * Work query
+     * INSERT INTO EMPLOYEE (ID, ADDRESS_ID, FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES('1', '1', 'aaa', 'bbb', '2099-12-30');
+     */
 
-        List <employee> employeeList = new ArrayList<>();
+    @Override
+    public List<Employee> getAll() throws SQLException {
+
+        List <Employee> employeeList = new ArrayList<>();
 
         PreparedStatement preparedStatement = null;
 
-        String sql = "SELECT ID, COUNTRY, CITY, STREET, POST_CODE FROM employee";
+        String sql = "SELECT ID, ADDRESS_ID, FIRST_NAME, LAST_NAME, BIRTHDAY FROM public.employee";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -79,12 +83,11 @@ public class EmployeeService extends Util implements EmployeeDAO {
             ResultSet resultSet = preparedStatement.executeQuery(sql);
 
             while (resultSet.next()) {
-                employee employee = new employee();
+                Employee employee = new employee();
                 employee.setId(resultSet.getLong("ID"));
-                employee.setCountry(resultSet.getString("COUNTRY"));
-                employee.setCity(resultSet.getString("CITY"));
-                employee.setStreet(resultSet.getString("STREET"));
-                employee.setPostcode(resultSet.getString("POST_CODE"));
+                employee.setFirstName(resultSet.getString("FIRST_NAME"));
+                employee.setLastName(resultSet.getString("LAST_NAME"));
+                employee.setBirthday(resultSet.getDate("BIRTHDAY"));
 
                 employeeList.add(employee);
             }
@@ -104,13 +107,13 @@ public class EmployeeService extends Util implements EmployeeDAO {
     }
 
     @Override
-    public employee getById(long id) throws SQLException {
+    public Employee getById(long id) throws SQLException {
 
         PreparedStatement preparedStatement = null;
 
         String sql = "SELECT ID, COUNTRY, CITY, STREET, POST_CODE FROM  employee WHERE ID = ?";
 
-        employee employee = new employee();
+        Employee employee = new employee();
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -151,7 +154,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
     }
 
     @Override
-    public void update(employee employee) throws SQLException {
+    public void update(Employee employee) throws SQLException {
         PreparedStatement preparedStatement = null;
 
         String sql = "UPDATE employee SET COUNTRY=?, CITY=?, STREET=?, POST_CODE=? WHERE ID = ?";
@@ -180,7 +183,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
     }
 
     @Override
-    public void remove(employee employee) throws SQLException {
+    public void remove(Employee employee) throws SQLException {
 
         PreparedStatement preparedStatement = null;
 

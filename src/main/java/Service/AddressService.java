@@ -21,6 +21,14 @@ public class AddressService extends Util implements AddressDAO {
 
     private Connection connection = getConnection();
 
+/* 	"ID" BIGINT NOT NULL,
+    "COUNTRY" VARCHAR(255) NOT NULL,
+	"CITY" VARCHAR(255) NOT NULL,
+	"STREET" VARCHAR(255) NOT NULL,
+    "POST_CODE" VARCHAR(15) NOT NULL,
+    -- ID must be Primary KEY
+    CONSTRAINT "ADDRESS_PKEY" PRIMARY KEY ("ID")*/
+
     @Override
     public void add(Address address) throws SQLException {
         PreparedStatement preparedStatement = null;
