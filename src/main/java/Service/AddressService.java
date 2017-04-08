@@ -12,11 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by user on 4/8/2017.
+ *     Class for manipulation table "ADDRESS"
+ * Realize relation "table ADDRESS (DB) <-> Java object"
+ * @author Виталий Сердюк
+ * @since 4/8/2017.
  */
 public class AddressService extends Util implements AddressDAO {
 
-    Connection connection = getConnection();
+    private Connection connection = getConnection();
 
     @Override
     public void add(Address address) throws SQLException {
@@ -49,7 +52,7 @@ public class AddressService extends Util implements AddressDAO {
     }
 
     @Override
-    public List<Address> getAll() {
+    public List<Address> getAll() throws SQLException {
 
         List <Address> addressList = new ArrayList<>();
 
@@ -63,11 +66,52 @@ public class AddressService extends Util implements AddressDAO {
             ResultSet resultSet = preparedStatement.executeQuery(sql);
 
             while (resultSet.next()) {
-            Address address = new Address();
+                Address address = new Address();
+                address.setId(resultSet.getLong("ID"));
+                address.setCountry(resultSet.getString("COUNTRY"));
+                address.setCity(resultSet.getString("CITY"));
+                address.setStreet(resultSet.getString("STREET"));
+                address.setPostcode(resultSet.getString("POST_CODE"));
+
+                addressList.add(address);
+            }
+
+        } catch (SQLException sqlError2) {
+            sqlError2.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null ) {
+                connection.close();
+            }
+        }
+
+        return addressList;
+    }
+
+    @Override
+    public Address getById(long id) throws SQLException {
+
+        PreparedStatement preparedStatement = null;
+
+        String sql = "SELECT ID, COUNTRY, CITY, STREET, POST_CODE FROM  ADDRESS WHERE ID = ?";
+
+        Address address = new Address();
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
             address.setId(resultSet.getLong("ID"));
+            address.setCountry(resultSet.getString("COUNTRY"));
+            address.setCity(resultSet.getString("CITY"));
+            address.setStreet(resultSet.getString("STREET"));
+            address.setPostcode(resultSet.getString("POST_CODE"));
 
-
-            addressList.add(address)
+            preparedStatement.executeUpdate();
 
         } catch (SQLException sqlError) {
             sqlError.printStackTrace();
@@ -80,21 +124,61 @@ public class AddressService extends Util implements AddressDAO {
             }
         }
 
-        return null;
+        return address;
     }
 
     @Override
-    public Address getById(long id) {
-        return null;
+    public void update(Address address) throws SQLException {
+        PreparedStatement preparedStatement = null;
+
+        String sql = "UPDATE ADDRESS SET COUNTRY=?, CITY=?, STREET=?, POST_CODE=? WHERE ID = ?";
+
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1,address.getCountry());
+            preparedStatement.setString(2,address.getCity());
+            preparedStatement.setString(3,address.getStreet());
+            preparedStatement.setString(4,address.getPostcode());
+            preparedStatement.setLong(5,address.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException sqlError) {
+            sqlError.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null ) {
+                connection.close();
+            }
+        }
     }
 
     @Override
-    public void update(Address address) {
+    public void remove(Address address) throws SQLException {
 
-    }
+        PreparedStatement preparedStatement = null;
 
-    @Override
-    public void remove(Address address) {
+        String sql = "DELETE FROM ADDRESS WHERE ID=?";
 
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setLong(1,address.getId());
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException sqlError) {
+            sqlError.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null ) {
+                connection.close();
+            }
+        }
     }
 }
