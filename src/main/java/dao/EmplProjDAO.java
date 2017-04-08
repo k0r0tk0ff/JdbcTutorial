@@ -18,7 +18,7 @@ public interface EmplProjDAO {
     //read
     List<EmplProj> getAll() throws SQLException;
 
-    Project getByEmployeeIdAndProjectId(long employeeId, long projectId) throws SQLException;
+    EmplProj getByEmployeeIdAndProjectId(long employeeId, long projectId) throws SQLException;
 
     //update
     void update(EmplProj emplProj) throws SQLException;
