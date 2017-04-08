@@ -137,11 +137,52 @@ public class EmplProjService extends Util implements EmplProjDAO {
 
     @Override
     public void update(EmplProj emplProj) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        String sql = "UPDATE emplProj SET EMPLOYEE_ID=?, PROJECT_ID=?";
+
+        try {
+            preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setLong(1, emplProj.getEmlployeeId());
+            preparedStatement.setLong(2,emplProj.getProjectId());
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException sqlError) {
+            sqlError.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null ) {
+                connection.close();
+            }
+        }
 
     }
 
     @Override
     public void remove(EmplProj emplProj) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        String sql = "DELETE FROM EMPL_PROJ WHERE EMPLOYEE_ID=?, PROJECT_ID=?";
 
+        try {
+            preparedStatement.getConnection();
+
+            preparedStatement.setLong(1, emplProj.getEmlployeeId());
+            preparedStatement.setLong(2, emplProj.getProjectId());
+
+            preparedStatement.executeUpdate();
+        }
+        catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+        } finally {
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (connection != null ) {
+                connection.close();
+            }
+
+        }
     }
 }
