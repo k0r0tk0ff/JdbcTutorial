@@ -4,6 +4,7 @@ import entity.EmplProj;
 import entity.Employee;
 import entity.Project;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -12,16 +13,16 @@ import java.util.List;
 public interface EmplProjDAO {
 
     //create
-    void add(EmplProj emplProj);
+    void add(EmplProj emplProj) throws SQLException;
 
     //read
-    List<EmplProj> getAll();
+    List<EmplProj> getAll() throws SQLException;
 
-    Project getByEmployeeIdAndProjectId(long employeeId, long projectId);
+    Project getByEmployeeIdAndProjectId(long employeeId, long projectId) throws SQLException;
 
     //update
-    void update(EmplProj emplProj);
+    void update(EmplProj emplProj) throws SQLException;
 
     //delete
-    void remove(EmplProj emplProj);
+    void remove(EmplProj emplProj) throws SQLException;
 }
