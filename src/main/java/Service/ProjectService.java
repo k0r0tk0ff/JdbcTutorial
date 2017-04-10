@@ -5,10 +5,7 @@ import dao.ProjectDAO;
 import entity.Employee;
 import entity.Project;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,14 +63,14 @@ public class ProjectService extends Util implements ProjectDAO {
 
         List <Project> projectList = new ArrayList<>();
 
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
 
         String sql = "SELECT ID, TITLE FROM project";
 
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            statement = connection.createStatement();
 
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 Project project = new Project();
@@ -86,8 +83,8 @@ public class ProjectService extends Util implements ProjectDAO {
         } catch (SQLException sqlError) {
             sqlError.printStackTrace();
         } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
+            if (statement != null) {
+                statement.close();
             }
             if (connection != null ) {
                 connection.close();

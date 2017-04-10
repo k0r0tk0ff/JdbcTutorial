@@ -11,7 +11,8 @@ import java.sql.SQLException;
 public class Util {
 
     private static final String DB_DRIVER = "org.h2.Driver";
-    private static final String DB_URL = "jdbc:h2:/~/test";
+    //private static final String DB_URL = "jdbc:h2:/~/test";
+    private static final String DB_URL = "jdbc:h2:tcp://localhost/~/test";
     private static final String DB_USERNAME = "sa";
     private static final String DB_PASSWORD = "";
 

@@ -4,10 +4,7 @@ import bl.Util;
 import dao.AddressDAO;
 import entity.Address;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,14 +61,15 @@ public class AddressService extends Util implements AddressDAO {
 
         List <Address> addressList = new ArrayList<>();
 
-        PreparedStatement preparedStatement = null;
+        //PreparedStatement preparedStatement = null;
+        Statement statement = null;
 
         String sql = "SELECT ID, COUNTRY, CITY, STREET, POST_CODE FROM ADDRESS";
 
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            statement = connection.createStatement();
 
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 Address address = new Address();
@@ -87,8 +85,8 @@ public class AddressService extends Util implements AddressDAO {
         } catch (SQLException sqlError2) {
             sqlError2.printStackTrace();
         } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
+            if (statement != null) {
+                statement.close();
             }
             if (connection != null ) {
                 connection.close();

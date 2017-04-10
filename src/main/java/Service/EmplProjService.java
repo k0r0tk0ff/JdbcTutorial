@@ -9,10 +9,7 @@ import entity.EmplProj;
 import entity.Employee;
 import entity.Project;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,14 +67,14 @@ public class EmplProjService extends Util implements EmplProjDAO {
     public List<EmplProj> getAll() throws SQLException {
         List<EmplProj> emplProjList = new ArrayList<>();
 
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
 
         String sql = "SELECT EMPLOYEE_ID, PROJECT_ID FROM EMPL_PROJ";
 
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            statement = connection.createStatement();
 
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 EmplProj emplProj = new EmplProj();
@@ -90,8 +87,8 @@ public class EmplProjService extends Util implements EmplProjDAO {
         } catch (SQLException sqlError2) {
             sqlError2.printStackTrace();
         } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
+            if (statement != null) {
+                statement.close();
             }
             if (connection != null ) {
                 connection.close();

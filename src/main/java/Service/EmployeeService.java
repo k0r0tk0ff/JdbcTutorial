@@ -5,10 +5,7 @@ import bl.Util;
 import dao.EmployeeDAO;
 import entity.Employee;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,14 +69,14 @@ public class EmployeeService extends Util implements EmployeeDAO {
 
         List <Employee> employeeList = new ArrayList<>();
 
-        PreparedStatement preparedStatement = null;
+        Statement statement = null;
 
         String sql = "SELECT ID, ADDRESS_ID, FIRST_NAME, LAST_NAME, BIRTHDAY FROM public.employee";
 
         try {
-            preparedStatement = connection.prepareStatement(sql);
+            statement = connection.createStatement();
 
-            ResultSet resultSet = preparedStatement.executeQuery(sql);
+            ResultSet resultSet = statement.executeQuery(sql);
 
             while (resultSet.next()) {
                 Employee employee = new Employee();
@@ -94,8 +91,8 @@ public class EmployeeService extends Util implements EmployeeDAO {
         } catch (SQLException sqlError2) {
             sqlError2.printStackTrace();
         } finally {
-            if (preparedStatement != null) {
-                preparedStatement.close();
+            if (statement != null) {
+                statement.close();
             }
             if (connection != null ) {
                 connection.close();
