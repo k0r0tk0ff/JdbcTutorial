@@ -8,11 +8,12 @@ public class Domain {
 
     public static void main(String[] args) {
         Util util = new Util();
-        util.getConnection();
+        util.getConnectionAndClose();
+
 
         //Add Address
-        Address address = new Address();
-        address.setId(1);
+        //Address address = new Address();
+        //address.setId(1);
 
     }
 }
