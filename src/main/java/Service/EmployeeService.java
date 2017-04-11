@@ -34,7 +34,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
     public void add(Employee employee) throws SQLException {
         PreparedStatement preparedStatement = null;
 
-        String sql = "INSERT INTO EMPLOYEE (ID, FIRST_NAME, LAST_NAME, BIRTHDAY) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO EMPLOYEE (ID, FIRST_NAME, LAST_NAME, BIRTHDAY, ADDRESS_ID) VALUES(?, ?, ?, ?, ?)";
 
         try {
             preparedStatement = connection.prepareStatement(sql);
@@ -43,6 +43,7 @@ public class EmployeeService extends Util implements EmployeeDAO {
             preparedStatement.setString(2,employee.getFirstName());
             preparedStatement.setString(3,employee.getLastName());
             preparedStatement.setDate(4,employee.getBirthday());
+            preparedStatement.setLong(5,employee.getAddressId());
 
             preparedStatement.executeUpdate();
 
